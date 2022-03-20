@@ -75,16 +75,6 @@ module EnPassant
                 return false
             end
     end
-
-    def en_passant(row, col, board)
-        color = np_color(row, col, board)
-        if color == :black
-            board[row - 1][col] = nil
-        elsif color == :white
-            board[row + 1][col] = nil
-        end
-    end
-
     def np_color(start_row, start_col, board)
         board[start_row][start_col].color == :black ? :black : :white
     end
