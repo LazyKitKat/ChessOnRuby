@@ -29,11 +29,18 @@ module CheckMove
 
         return false if start_row == end_row && start_col = end_col
 
+        if is_np?(start_row, start_col, end_row, end_col, board)
+            if can_np?(start_row, start_col, end_row, end_col, board)
+                return true
+            end
+        end
+
         if valid_pawn_attack?(start_row, start_col, end_row, end_col, board)
             return true    
         end
 
-        
+        return true if can_np?(start_row, start_col, end_row, end_col, board)
+    
         return false if start_col != end_col
         
         if board[start_row][start_col].color == :white
@@ -55,9 +62,34 @@ module CheckMove
         end
     end     
 
+    def valid_pawn_attack?(start_row, start_col, end_row, end_col, board)
+        if board[start_row][start_col].color == :white
+            attack_left = [-1, -1]
+            attack_right = [-1, 1]
+        else
+            attack_left = [1, -1]
+            attack_right = [1, 1]
+        end
+        path = [end_row - start_row, end_col - start_col]
+
+        
+
+
+        
+        if path == attack_left || path == attack_right
+            return false if board[end_row][end_col].nil?
+            return false if board[end_row][end_col].color == board[start_row][start_col].color
+            return true
+        end
+        false 
+
+    end
+
     def valid_knight_move?(start_row, start_col, end_row, end_col, board)
 
-        return false if  board[end_row][end_col] != nil && board[end_row][end_col].color == board[start_row][start_col].color
+        if !board[end_row][end_col].nil?
+            return false if board[end_row][end_col].color == board[start_row][start_col].color
+        end
 
         start_pos = [start_row, start_col]
         valid_moves = [[1, 2], [2, 1], [-1, -2], [-2, -1], [1, -2], [-1, 2], [2, -1], [-2, 1]]
@@ -69,19 +101,7 @@ module CheckMove
         false
     end
 
-    def valid_pawn_attack?(start_row, start_col, end_row, end_col, board)
-        if board[start_row][start_col].color == :white
-            attack_left = [-1, -1]
-            attack_right = [-1, 1]
-        else
-            attack_left = [1, -1]
-            attack_right = [1, 1]
-        end
-        return false if [end_row - start_row, end_col - start_col] != attack_left || [end_row - start_row, end_col - start_col] != attack_right
 
-        true
-
-    end
 
     def valid_rook_move?(start_row, start_col, end_row, end_col, board)
         if start_row == end_row
@@ -122,20 +142,22 @@ module CheckMove
     def valid_diagonal_move?(start_row, start_col, end_row, end_col, board)
         d_one = end_row - start_row
         d_two = end_col - start_col
-        return false if board[end_row][end_col].color == board[start_row][start_col].color
+        if !board[end_row][end_col].nil?
+            return false if board[end_row][end_col].color == board[start_row][start_col].color
+        end
         until start_row == end_row
             if d_one > 0 && d_two > 0
                 start_row += 1
-                end_row += 1
+                start_col += 1
             elsif d_one > 0 && d_two < 0
                 start_row += 1
-                end_row -= 1
+                start_col -= 1
             elsif d_one < 0 && d_two < 0
                 start_row -= 1
-                end_row -= 1
+                start_col -= 1
             else
                 start_row -= 1
-                end_row += 1
+                start_col += 1
             end
             return false if board[start_row][start_col] != nil && board[start_row][start_col] != board[end_row][end_col]
         end
@@ -179,7 +201,8 @@ module CheckMove
         when :knight
            valid_moves = [[1, 2], [2, 1], [-1, -2], [-2, -1], [1, -2], [-1, 2], [2, -1], [-2, 1]]
            valid_moves.each do |move|
-                return true if valid_knight_move?(start_row, start_pos, move[0] + start_row, move[1] + start_col, board)
+                next if (move[0] + start_row) > 7 || (move[0] + start_row) < 0 || (move[1] + start_col) > 7 || (move[1] + start_col) < 0
+                return true if valid_knight_move?(start_row, start_col, move[0] + start_row, move[1] + start_col, board)
            end
            false
         when :rook

@@ -1,6 +1,11 @@
 module Castling
+
+    def can_castle?(color)
+        return true if can_castle_king?(color) || can_castle_queen?(color) 
+        false
+    end
     def can_castle_king?(color)
-        if color.is?(:black)
+        if color == :black
             if @chess_board[0][4].moved && @chess_board[0][7].moved 
                 false
             elsif !@chess_board[0][5].nil? && !@chess_board[0][6].nil?
@@ -20,7 +25,7 @@ module Castling
     end
 
     def can_castle_queen?(color)
-        if color.is?(:black)
+        if color == :black
             if @chess_board[0][4].moved && @chess_board[0][0].moved 
                 false
             elsif !@chess_board[0][1].nil? && !@chess_board[0][2].nil? && !@chess_board[0][3].nil?
@@ -41,26 +46,24 @@ module Castling
 
     def castle(color, val)
         if color == :black
-            case val
-            when "k"
+            if val == "k"
                 @chess_board[0][6] = @chess_board[0][4]
                 @chess_board[0][4] = nil
                 @chess_board[0][5] = @chess_board[0][7]
                 @chess_board[0][7] = nil
-            when "q"
+            elsif val == "q"
                 @chess_board[0][2] = @chess_board[0][4]
                 @chess_board[0][4] = nil
                 @chess_board[0][3] = @chess_board[0][7]
                 @chess_board[0][7] = nil
             end
         else
-            case val
-            when "k"
+            if val == "k"
                 @chess_board[7][6] = @chess_board[7][4]
                 @chess_board[7][4] = nil
                 @chess_board[7][5] = @chess_board[7][7]
                 @chess_board[7][7] = nil
-            when "q"
+            elsif val == "q"
                 @chess_board[7][2] = @chess_board[7][4]
                 @chess_board[7][4] = nil
                 @chess_board[7][3] = @chess_board[7][7]

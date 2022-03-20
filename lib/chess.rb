@@ -4,6 +4,8 @@ require_relative 'module/instructions'
 
 class Chess
     include Instructions
+
+
     def initialize
         @player_one = Player.new(:white)
         @player_two = Player.new(:black)
@@ -22,34 +24,42 @@ class Chess
 
         help()
         until finished 
-            
-
+            color = @current_player.color
             which_castle = ""
             @board.print
-            
             puts "#{@current_player.color}'s move." 
             puts "Choose your piece: "
             print "$ > " 
             pick = gets.chomp
+
             until @board.valid_pick?(@current_player.color, pick)
                 break if pick.downcase == "r" 
-                if pick.downcase == "c" && (@board.can_castle_king?(@curret_player.color) || @board.can_castle_queen?(@curret_player.color))
-                    castle_help()
+                if pick.downcase == "c" && @board.can_castle?(@current_player.color)
+                    puts castle_help()
+                    
+                    statement = "c"
+                    statement += "k" if @board.can_castle_king?(color)
+                    statement += "q" if @board.can_castle_queen?(color)
+
                     which_castle = gets.chomp
-                    until "kcq".include?(which_castle)
+                    until statement.include?(which_castle)
                         puts "Invalid input."
                         castle_help()
                         which_castle = gets.chomp
-                        next if which_castle == "k" && !@board.can_castle_king?(@curret_player.color)
-                        next if which_castle == "q" && !@board.can_castle_queen?(@curret_player.color)
                     end
-                    break unless which_castle == "c" 
-                elsif pick.downcase == "c" && !@board.can_castle_king?(@curret_player.color) && !@board.can_castle_queen?(@curret_player.color)
+                    if which_castle == "c"
+                        which_castle = ""
+                    else
+                        break
+                    end
+                end 
+                if pick.downcase == "c" && !@board.can_castle?(@current_player.color)
                     puts "You can't castle."
                 end
                 puts "Invalid pick"
                 print "$ > " 
                 pick = gets.chomp
+                pick = pick.capitalize
             end
             if pick == "c"
                 @board.castle(color, which_castle)
@@ -72,6 +82,7 @@ class Chess
                 destination = gets.chomp
             end
             @board.move_piece(piece, destination)
+            switch_player()
         end
         if result == "win"
             puts "#{@current_player.color.capitalize} won!"

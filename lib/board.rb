@@ -2,19 +2,26 @@ require_relative 'piece'
 require_relative 'module/instructions'
 require_relative 'module/check_move'
 require_relative 'module/castling'
+require_relative 'module/promo'
+require_relative 'module/checked'
+require_relative 'module/en_p'
 
 class Board
 
     attr_reader :chess_board
+    attr_accessor :en_passant
 
     include CheckMove
+    include EnPassant
     include Instructions
     include Castling
+    include Promo
     
     def initialize
         @chess_board = Array.new(8) { Array.new(8) }
         @letters = [*("A".."H")]
         @numbers = [*("1".."8")]
+        @en_p = []
         init_board()
     end
     
@@ -96,6 +103,26 @@ class Board
         @chess_board[end_position[0]][end_position[1]] = @chess_board[start_position[0]][start_position[1]]
         @chess_board[start_position[0]][start_position[1]] = nil
         @chess_board[end_position[0]][end_position[1]].moved = true
+        p @en_p
+        if @en_p.include?(@chess_board[end_position[0]][end_position[1]])
+            if @chess_board[end_position[0]][end_position[1]].color == :black
+                @chess_board[end_position[0] - 1][end_position[1]] = nil
+            else
+                @chess_board[end_position[0] + 1][end_position[1]] = nil
+            end
+            @en_p.shift
+        end
+        if @chess_board[end_position[0]][end_position[1]].type == :pawn
+            if @chess_board[end_position[0]][end_position[1]].color == :black
+                if end_position[0] == 7
+                    promotion(end_position[0], end_position[1], @chess_board)
+                end
+            else
+                if end_position[0] == 0
+                    promotion(end_position[0], end_position[1], @chess_board)
+                end
+            end
+        end
     end
 
     def valid_move?(piece, end_position)
