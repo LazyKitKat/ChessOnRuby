@@ -4,12 +4,9 @@ module CheckMove
         if !board[end_row][end_col].nil?
             if board[end_row][end_col].color == board[start_row][start_col].color
                 return false
-            else
-                return true
             end
-        else
-            return true
         end
+        true
     end
 
     def valid_queen_move?(start_row, start_col, end_row, end_col, board)
@@ -31,7 +28,14 @@ module CheckMove
 
     def valid_pawn_move?(start_row, start_col, end_row, end_col, board)
 
-        return false if start_row == end_row && start_col = end_col
+        return false if start_row == end_row && start_col == end_col
+        
+        color = board[start_row][start_col].color
+
+        if !board[end_row][end_col].nil?
+            return false if board[end_row][end_col].color == color
+        end
+
 
         if is_np?(start_row, start_col, end_row, end_col, board)
             if can_np?(start_row, start_col, end_row, end_col, board)
@@ -46,6 +50,8 @@ module CheckMove
         return true if can_np?(start_row, start_col, end_row, end_col, board)
     
         return false if start_col != end_col
+
+        
         
         if board[start_row][start_col].color == :white
             return false if start_row < end_row
@@ -61,9 +67,8 @@ module CheckMove
         return false if (start_row - end_row).abs > distance
         if !board[end_row][end_col].nil?
             return false
-        else
-            return true
         end
+        true
     end     
 
     def valid_pawn_attack?(start_row, start_col, end_row, end_col, board)
@@ -76,10 +81,6 @@ module CheckMove
         end
         path = [end_row - start_row, end_col - start_col]
 
-        
-
-
-        
         if path == attack_left || path == attack_right
             return false if board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == board[start_row][start_col].color
@@ -135,8 +136,9 @@ module CheckMove
     end
 
     def valid_vertical_move?(start_row, start_col, end_row, end_col, board)
+        color = board[start_row][start_col].color
         if !board[end_row][end_col].nil?
-            return false if board[end_row][end_col].color == board[start_row][start_col].color
+            return false if board[end_row][end_col].color == color
         end
         return false if start_col != end_col
         until start_row == end_row

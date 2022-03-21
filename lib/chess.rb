@@ -12,6 +12,25 @@ class Chess
         @player_two = Player.new(:black)
         @board = Board.new
         @current_player = @player_one
+        loop do
+            pick = gets.chomp.downcase
+            if pick == "l"
+                if Dir.exist?('../save_files')
+                    load()
+                    play()
+                    break
+                else
+                    puts "No save files"
+                end
+            elsif pick == "s"
+                play()
+                break
+            elsif pick == "e"
+                return
+            else
+                puts "Invalid pick"
+            end
+        end
     end
 
     def switch_player
@@ -92,6 +111,3 @@ class Chess
         end
     end
 end
-
-a = Chess.new
-a.play
