@@ -9,7 +9,7 @@ require_relative 'module/en_p'
 class Board
 
     attr_reader :chess_board
-    attr_accessor :en_passant
+    attr_accessor :en_p
 
     include CheckMove
     include EnPassant
@@ -97,29 +97,30 @@ class Board
         end
     end
 
-    def move_piece(piece, end_position)
+    def move_piece(piece, end_position, board = @chess_board)
         end_position = format_end_position(end_position)
         start_position = piece_coord(piece)
-        @chess_board[end_position[0]][end_position[1]] = @chess_board[start_position[0]][start_position[1]]
-        @chess_board[start_position[0]][start_position[1]] = nil
-        @chess_board[end_position[0]][end_position[1]].moved = true
+        board[end_position[0]][end_position[1]] = board[start_position[0]][start_position[1]]
+        board[start_position[0]][start_position[1]] = nil
+        board[end_position[0]][end_position[1]].moved = true
         p @en_p
-        if @en_p.include?(@chess_board[end_position[0]][end_position[1]])
-            if @chess_board[end_position[0]][end_position[1]].color == :black
-                @chess_board[end_position[0] - 1][end_position[1]] = nil
+        if @en_p.include?(board[end_position[0]][end_position[1]])
+            @en_p.pop
+            if board[end_position[0]][end_position[1]].color == :black
+                board[end_position[0] - 1][end_position[1]] = nil
             else
-                @chess_board[end_position[0] + 1][end_position[1]] = nil
+                board[end_position[0] + 1][end_position[1]] = nil
             end
-            @en_p.shift
+            
         end
-        if @chess_board[end_position[0]][end_position[1]].type == :pawn
-            if @chess_board[end_position[0]][end_position[1]].color == :black
+        if board[end_position[0]][end_position[1]].type == :pawn
+            if board[end_position[0]][end_position[1]].color == :black
                 if end_position[0] == 7
-                    promotion(end_position[0], end_position[1], @chess_board)
+                    promotion(end_position[0], end_position[1], board)
                 end
             else
                 if end_position[0] == 0
-                    promotion(end_position[0], end_position[1], @chess_board)
+                    promotion(end_position[0], end_position[1], board)
                 end
             end
         end

@@ -1,5 +1,6 @@
 require_relative 'player'
 require_relative 'board'
+require_relative 'load_save'
 require_relative 'module/instructions'
 
 class Chess
