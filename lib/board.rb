@@ -15,6 +15,7 @@ class Board
     include EnPassant
     include Instructions
     include Castling
+    include Checked
     include Promo
     
     def initialize
@@ -103,7 +104,7 @@ class Board
         board[end_position[0]][end_position[1]] = board[start_position[0]][start_position[1]]
         board[start_position[0]][start_position[1]] = nil
         board[end_position[0]][end_position[1]].moved = true
-        p @en_p
+        p is_checked?(:black)
         if @en_p.include?(board[end_position[0]][end_position[1]])
             @en_p.pop
             if board[end_position[0]][end_position[1]].color == :black
@@ -128,7 +129,7 @@ class Board
 
     def valid_move?(piece, end_position)
         start_coords = piece_coord(piece)
-        end_position = format_end_position(end_position)
+        end_position = format_end_position(end_position) if end_position.kind_of?(String)
         return false if end_position.nil?
         case piece.type
         when :pawn
