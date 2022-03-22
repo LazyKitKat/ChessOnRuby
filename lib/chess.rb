@@ -43,7 +43,7 @@ class Chess
         result = ""
 
 
-        help()
+        puts help()
         until finished 
             color = @current_player.color
             which_castle = ""
