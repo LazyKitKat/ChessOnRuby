@@ -6,7 +6,7 @@ module Checked
             for j in 0..7
                 next if mock[i][j].nil?
                 if mock[i][j].color == enemy
-                    return true if valid_mock_move?([i,j], king_position, mock)
+                    return true if can_attack_king?(i, j, mock, color)
                 end
             end
         end
@@ -24,12 +24,16 @@ module Checked
             end
         end
     end
+    def format_for_mock(row, col)
+        str = @letter[col] + @number[row]
+        return str
+    end
     
-    def check_after_move?(start_row, start_col, end_row, end_col, color, board)
+    def check_after_move?(start_row, start_col, end_position, color, board)
         mock = create_mock(board)
         start_position = [start_row, start_col]
-        end_position = [end_row, end_col]
-        mock_move(start_position, end_position, board)
+        
+        move_piece(mock[start_row][start_col], end_position, board)
         if is_checked?(color, mock) 
             return true
         end

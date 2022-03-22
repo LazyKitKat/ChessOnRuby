@@ -1,5 +1,9 @@
 ## Chess on Ruby
 
+<p align="center">
+  <img width="460" height="460" src="./src/top.png">
+</p>
+
 This is my project for TOP's Ruby course final assignment. 
 
 # How to run

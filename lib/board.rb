@@ -6,6 +6,7 @@ require_relative 'module/promo'
 require_relative 'module/checked'
 require_relative 'module/en_p'
 require_relative 'module/mock'
+require_relative 'module/move_helper'
 
 class Board
 
@@ -19,7 +20,8 @@ class Board
     include Checked
     include Promo
     include Mock
-    
+    include MoveHelper
+
     def initialize
         @chess_board = Array.new(8) { Array.new(8) }
         @letters = [*("A".."H")]
@@ -106,9 +108,6 @@ class Board
         board[start_position[0]][start_position[1]] = nil
         board[end_position[0]][end_position[1]].moved = true
 
-        ock = Marshal.load(Marshal.dump(board))
-        p ock[end_position[0]][end_position[1]]
-
         if @en_p.include?(board[end_position[0]][end_position[1]])
             @en_p.pop
             if board[end_position[0]][end_position[1]].color == :black
@@ -134,10 +133,11 @@ class Board
     def valid_move?(piece, end_position, board = @chess_board)
         start_coords = piece_coord(piece)
         color = piece.color
-        if end_position.kind_of?(String)
-            end_position = format_end_position(end_position)
-        end
+        temp = end_position
+        end_position = format_end_position(end_position)
+    
         return false if end_position.nil?
+
 
         case piece.type
         when :pawn

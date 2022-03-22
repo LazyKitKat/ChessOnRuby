@@ -31,6 +31,8 @@ module CheckMove
         return false if start_row == end_row && start_col == end_col
         
         color = board[start_row][start_col].color
+        
+       ## return false if check_after_move?(start_row, start_col, end_row, end_col, color, board)
 
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == color
@@ -47,7 +49,7 @@ module CheckMove
             return true    
         end
 
-        return true if can_np?(start_row, start_col, end_row, end_col, board)
+        
     
         return false if start_col != end_col
 
