@@ -2,18 +2,19 @@ require 'yaml'
 
 module LoadSave
     def save(filename)
-        Dir.mkdir('../save_files') unless Dir.exist?('../save_files')
+        Dir.mkdir('save_files') unless Dir.exist?('save_files')
         data = {
             board: @board,
             player_one: @player_one,
             player_two: @player_two,
             current_player: @current_player
         }
-        file = File.new("../save_files/#{filename}.yml", "w") { |save| save.write(data.to_yaml) }
+        file = File.new("save_files/#{filename}.yml", "w")
+        File.open(file, "w") { |save| save.write(data.to_yaml) }
     end
 
     def load_game(filename)
-        load_game = Yaml.load(File.read(filename))
+        load_game = YAML.load(File.read("save_files/#{filename}"))
         @board = load_game[:board]
         @player_one = load_game[:player_one]
         @player_two = load_game[:player_two]
@@ -21,9 +22,9 @@ module LoadSave
     end
 
     def load
-        if Dir.exist?('../save_files') && !Dir.empty?('../save_files')
+        if Dir.exist?('save_files') && !Dir.empty?('save_files')
             entries = Dir.entries("save_files").delete_if { |dir| dir == "." || dir == ".." }
-            entries.each_with_index { |save, i| puts  (i + 1).to_s + ")" + save }
+            entries.each_with_index { |save, i| puts  (i + 1).to_s + ") " + save }
             pick_load = gets.chomp.to_i
             file_to_load = entries[pick_load - 1]
             until file_to_load != nil

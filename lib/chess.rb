@@ -5,6 +5,7 @@ require_relative 'module/instructions'
 
 class Chess
     include Instructions
+    include LoadSave
 
 
     def initialize
@@ -15,7 +16,7 @@ class Chess
         loop do
             pick = gets.chomp.downcase
             if pick == "l"
-                if Dir.exist?('../save_files')
+                if Dir.exist?('save_files')
                     load()
                     play()
                     break
@@ -54,6 +55,11 @@ class Chess
 
             until @board.valid_pick?(@current_player.color, pick)
                 break if pick.downcase == "r" 
+                if pick == "save"
+                    print "Enter a file name: "
+                    filename = gets.chomp
+                    save(filename)
+                end
                 if pick.downcase == "c" && @board.can_castle?(@current_player.color)
                     puts castle_help()
                     

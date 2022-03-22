@@ -26,7 +26,7 @@ module Checked
     end
     
     def check_after_move?(start_row, start_col, end_row, end_col, color, board)
-        mock = Marshal.load(Marshal.dump(board))
+        mock = create_mock(board)
         start_position = [start_row, start_col]
         end_position = [end_row, end_col]
         mock_move(start_position, end_position, board)

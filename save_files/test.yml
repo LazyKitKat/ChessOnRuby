@@ -1,0 +1,219 @@
+---
+:board: !ruby/object:Board
+  chess_board:
+  - - !ruby/object:Piece
+      color: :black
+      type: :rook
+      symbol: "♖"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :knight
+      symbol: "♘"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :bishop
+      symbol: "♗"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :queen
+      symbol: "♕"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :king
+      symbol: "♔"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :bishop
+      symbol: "♗"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :knight
+      symbol: "♘"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :rook
+      symbol: "♖"
+      moved: false
+  - - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+    - !ruby/object:Piece
+      color: :black
+      type: :pawn
+      symbol: "♙"
+      moved: false
+  - -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+  - -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+  - -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+  - -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+  - - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: false
+  - - !ruby/object:Piece
+      color: :white
+      type: :rook
+      symbol: "♜"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :knight
+      symbol: "♞"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :bishop
+      symbol: "♝"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :queen
+      symbol: "♛"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :king
+      symbol: "♚"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :bishop
+      symbol: "♝"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :knight
+      symbol: "♞"
+      moved: false
+    - !ruby/object:Piece
+      color: :white
+      type: :rook
+      symbol: "♜"
+      moved: false
+  letters:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  - G
+  - H
+  numbers:
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  - '5'
+  - '6'
+  - '7'
+  - '8'
+  en_p: []
+:player_one: &1 !ruby/object:Player
+  color: :white
+:player_two: !ruby/object:Player
+  color: :black
+:current_player: *1
