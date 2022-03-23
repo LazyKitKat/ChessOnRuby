@@ -15,6 +15,8 @@ module CheckMove
         end
 
         return false if start_col == end_col && start_row == end_row
+
+
         if start_col == end_col
             return valid_vertical_move?(start_row, start_col, end_row, end_col, board)
         elsif start_row == end_row
@@ -29,10 +31,9 @@ module CheckMove
     def valid_pawn_move?(start_row, start_col, end_row, end_col, board)
 
         return false if start_row == end_row && start_col == end_col
-        
         color = board[start_row][start_col].color
         
-       ## return false if check_after_move?(start_row, start_col, end_row, end_col, color, board)
+        return false if check_after_move?(start_row, start_col, end_row, end_col, board)
 
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == color
@@ -44,6 +45,8 @@ module CheckMove
                 return true
             end
         end
+
+ 
 
         if valid_pawn_attack?(start_row, start_col, end_row, end_col, board)
             return true    
@@ -70,6 +73,10 @@ module CheckMove
         if !board[end_row][end_col].nil?
             return false
         end
+        
+        
+        
+
         true
     end     
 
@@ -97,7 +104,7 @@ module CheckMove
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == board[start_row][start_col].color
         end
-
+        
         start_pos = [start_row, start_col]
         valid_moves = [[1, 2], [2, 1], [-1, -2], [-2, -1], [1, -2], [-1, 2], [2, -1], [-2, 1]]
         move = valid_moves.each.map do |move|
@@ -112,6 +119,7 @@ module CheckMove
 
     def valid_rook_move?(start_row, start_col, end_row, end_col, board)
         return false if start_row == end_row && start_col == end_col
+
         if start_row == end_row
             valid_horizotnal_move?(start_row, start_col, end_row, end_col, board)
         elsif start_col == end_col
@@ -125,6 +133,7 @@ module CheckMove
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == board[start_row][start_col].color
         end
+        
         return false if start_row != end_row
         until start_col == end_col
             if start_col > end_col
@@ -139,6 +148,7 @@ module CheckMove
 
     def valid_vertical_move?(start_row, start_col, end_row, end_col, board)
         color = board[start_row][start_col].color
+        
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == color
         end
@@ -157,6 +167,7 @@ module CheckMove
     def valid_diagonal_move?(start_row, start_col, end_row, end_col, board)
         d_one = end_row - start_row
         d_two = end_col - start_col
+        
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == board[start_row][start_col].color
         end

@@ -20,7 +20,6 @@ class Board
     include Checked
     include Promo
     include Mock
-    include MoveHelper
 
     def initialize
         @chess_board = Array.new(8) { Array.new(8) }
@@ -74,12 +73,12 @@ class Board
         puts "  A B C D E F G H"
     end
 
-    def format_input(input)
+    def format_input(input, board = @chess_board)
         input = input.split("")
         return nil if input.length != 2 || !@numbers.include?(input[1]) || !@letters.include?(input[0]) 
         row = @numbers.index(input[1])
         col = @letters.index(input[0])
-        return @chess_board[row][col]
+        return board[row][col]
     end
 
     def format_end_position(input)
@@ -102,8 +101,11 @@ class Board
     end
 
     def move_piece(piece, end_position, board = @chess_board)
+        
         end_position = format_end_position(end_position)
+    
         start_position = piece_coord(piece, board)
+     
         board[end_position[0]][end_position[1]] = board[start_position[0]][start_position[1]]
         board[start_position[0]][start_position[1]] = nil
         board[end_position[0]][end_position[1]].moved = true
@@ -131,14 +133,12 @@ class Board
     end
 
     def valid_move?(piece, end_position, board = @chess_board)
-        start_coords = piece_coord(piece)
+        start_coords = piece_coord(piece) 
         color = piece.color
-        temp = end_position
-        end_position = format_end_position(end_position)
-    
+        end_position = format_end_position(end_position) if end_position.kind_of?(String)
+        
         return false if end_position.nil?
-
-
+    
         case piece.type
         when :pawn
             valid_pawn_move?(start_coords[0], start_coords[1], end_position[0], end_position[1], board)

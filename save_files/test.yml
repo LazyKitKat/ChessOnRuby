@@ -101,7 +101,11 @@
     -
     -
     -
-    -
+    - !ruby/object:Piece
+      color: :white
+      type: :pawn
+      symbol: "♟"
+      moved: true
     -
     -
     -
@@ -133,11 +137,7 @@
       type: :pawn
       symbol: "♟"
       moved: false
-    - !ruby/object:Piece
-      color: :white
-      type: :pawn
-      symbol: "♟"
-      moved: false
+    -
     - !ruby/object:Piece
       color: :white
       type: :pawn
@@ -212,8 +212,8 @@
   - '7'
   - '8'
   en_p: []
-:player_one: &1 !ruby/object:Player
+:player_one: !ruby/object:Player
   color: :white
-:player_two: !ruby/object:Player
+:player_two: &1 !ruby/object:Player
   color: :black
 :current_player: *1
