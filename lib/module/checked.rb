@@ -40,8 +40,8 @@ module Checked
     
     def can_attack_king?(start_row, start_col, king_position, board)
         piece = board[start_row][start_col]
-        type = board[start_row][start_col].type
-
+        type = piece.type
+        color = piece.color
         
         case type 
         when :pawn
@@ -57,15 +57,61 @@ module Checked
             return true if possible_attacks.include?(king_position)
         when :queen
             possible_attacks = Array.new
-            moves = diagonal_moves() + vertical_moves() + horizontal_moves()
+            moves = [[1,1], [1,-1], [-1,1], [-1,-1], [1,0], [-1,0], [0,1], [0,-1]]
+            row = start_row
+            col = start_col
             moves.each do |mv|
                 loop do
-                    
+                    row += mv[0]
+                    col += mv[1]
+                    break if row > 7 || col > 7 || row < 0 || col < 0
+                    break if board[row][col] != nil && board[row][col].color == color
+                    possible_attacks << [row, col]
+                    break if board[row][col] != nil && board[row][col].color != color
                 end
             end
+            return true if possible_attacks.include?(king_position)
         when :knight
+            possible_attacks = Array.new
+            moves = [[1, 2], [2, 1], [-1, -2], [-2, -1], [1, -2], [-1, 2], [2, -1], [-2, 1]]
+            moves.each do |mv|
+                next if start_row + mv[0] > 7 || start_col + mv[1] > 7 || start_row + mv[0] < 0 || start_col + mv[1] < 0
+                next if board[start_row + mv[0]][start_col + mv[1]] != nil && board[start_row + mv[0]][start_col + mv[1]].color == color
+                possible_attacks << [start_row + mv[0], start_col + mv[0]]
+            end
+            return true if possible_attacks.include?(king_position)
         when :bishop
+            possible_attacks = Array.new
+            moves = [[1,1], [1,-1], [-1,1], [-1,-1]]
+            row = start_row
+            col = start_col
+            moves.each do |mv|
+                loop do
+                    row += mv[0]
+                    col += mv[1]
+                    break if row > 7 || col > 7 || row < 0 || col < 0
+                    break if board[row][col] != nil && board[row][col].color == color
+                    possible_attacks << [row, col]
+                    break if board[row][col] != nil && board[row][col].color != color
+                end
+            end
+            return true if possible_attacks.include?(king_position)
         when :rook
+            possible_attacks = Array.new
+            moves = [[1,0], [-1,0], [0,1],[0,-1]]
+            row = start_row
+            col = start_col
+            moves.each do |mv|
+                loop do
+                    row += mv[0]
+                    col += mv[1]
+                    break if row > 7 || col > 7 || row < 0 || col < 0
+                    break if board[row][col] != nil && board[row][col].color == color
+                    possible_attacks << [row, col]
+                    break if board[row][col] != nil && board[row][col].color != color
+                end
+            end
+            return true if possible_attacks.include?(king_position)
         end
         false
     end

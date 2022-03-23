@@ -6,7 +6,6 @@ require_relative 'module/promo'
 require_relative 'module/checked'
 require_relative 'module/en_p'
 require_relative 'module/mock'
-require_relative 'module/move_helper'
 
 class Board
 
