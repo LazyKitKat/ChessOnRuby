@@ -127,8 +127,6 @@ class Chess
             
             switch_player()
 
-            p @board.check?(color)
-
             if @board.check?(color)
                 @current_player.check = true
                 puts "Check!"
