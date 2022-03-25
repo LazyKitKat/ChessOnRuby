@@ -3,20 +3,17 @@ require_relative 'module/instructions'
 require_relative 'module/check_move'
 require_relative 'module/castling'
 require_relative 'module/promo'
-require_relative 'module/checked'
 require_relative 'module/en_p'
 require_relative 'module/mock'
 
 class Board
 
-    attr_reader :chess_board
-    attr_accessor :en_p
+    attr_accessor :chess_board
 
     include CheckMove
     include EnPassant
     include Instructions
     include Castling
-    include Checked
     include Promo
     include Mock
 
@@ -77,7 +74,7 @@ class Board
         return nil if input.length != 2 || !@numbers.include?(input[1]) || !@letters.include?(input[0]) 
         row = @numbers.index(input[1])
         col = @letters.index(input[0])
-        return board[row][col]
+        return [row, col]
     end
 
     def format_end_position(input)
@@ -88,14 +85,14 @@ class Board
         return [row, col]
     end
 
-    def valid_pick?(color, input)
-        picked = format_input(input)
-        position = format_end_position(input)
-        return false if picked.nil?
-        return false if !has_valid_move?(position[0], position[1], @chess_board)
-        if picked.color != color
+    def valid_pick?(color, input, board = @chess_board)
+        position = format_input(input)
+        return false if board[position[0]][position[1]].nil?
+        return false if position.nil?
+        if board[position[0]][position[1]].color != color
             return false
         end
+        return false if !has_valid_move?(position[0], position[1], @chess_board)
         true
     end
 
@@ -103,7 +100,7 @@ class Board
         
         end_position = format_end_position(end_position)
     
-        start_position = piece_coord(piece, board)
+        start_position = format_input(piece)
      
         board[end_position[0]][end_position[1]] = board[start_position[0]][start_position[1]]
         board[start_position[0]][start_position[1]] = nil
@@ -131,14 +128,23 @@ class Board
         end
     end
 
+    def mock_move(start_position, end_position, board = @chess_board)
+        start_position = format_input(start_position)
+        end_position = format_end_position(end_position)
+        board[end_position[0]][end_position[1]] = board[start_position[0]][start_position[1]]
+        board[start_position[0]][start_position[1]] = nil
+        board[end_position[0]][end_position[1]].moved = true
+    end
+
     def valid_move?(piece, end_position, board = @chess_board)
-        start_coords = piece_coord(piece) 
-        color = piece.color
+        piece = format_input(piece) if piece.kind_of?(String)
+        start_coords = piece
+        color = board[piece[0]][piece[1]].color
         end_position = format_end_position(end_position) if end_position.kind_of?(String)
         
         return false if end_position.nil?
     
-        case piece.type
+        case board[piece[0]][piece[1]].type
         when :pawn
             valid_pawn_move?(start_coords[0], start_coords[1], end_position[0], end_position[1], board)
         when :queen
@@ -152,10 +158,6 @@ class Board
         when :knight
             valid_knight_move?(start_coords[0], start_coords[1], end_position[0], end_position[1], board)
         end
-    end
-
-    def pick_piece(input)
-        return format_input(input)
     end
 
     def piece_coord(piece, board = @chess_board)

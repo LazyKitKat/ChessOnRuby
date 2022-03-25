@@ -214,6 +214,8 @@
   en_p: []
 :player_one: !ruby/object:Player
   color: :white
+  check: false
 :player_two: &1 !ruby/object:Player
   color: :black
+  check: false
 :current_player: *1

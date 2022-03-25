@@ -1,7 +1,7 @@
 module CheckMove
     def valid_king_move?(start_row, start_col, end_row, end_col, board)
         return false if (start_col - end_col).abs > 1 || (start_row - end_row).abs > 1 || start_row == end_row && start_col = end_col
-        return false if check_after_move?(start_row, start_col, end_row, end_col, board)
+        
         if !board[end_row][end_col].nil?
             if board[end_row][end_col].color == board[start_row][start_col].color
                 return false
@@ -34,7 +34,7 @@ module CheckMove
         return false if start_row == end_row && start_col == end_col
         color = board[start_row][start_col].color
         
-        return false if check_after_move?(start_row, start_col, end_row, end_col, board)
+        
 
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == color
@@ -108,11 +108,14 @@ module CheckMove
         
         start_pos = [start_row, start_col]
         valid_moves = [[1, 2], [2, 1], [-1, -2], [-2, -1], [1, -2], [-1, 2], [2, -1], [-2, 1]]
-        move = valid_moves.each.map do |move|
-            move.each_with_index.map { |num, i| num + start_pos[i] unless num + start_pos[i] > 7 || num + start_pos[i] < 0 }
+        move = []
+        valid_moves.each do |mv|
+            i = start_pos[0] + mv[0]
+            j = start_pos[1] + mv[1]
+            unless i > 7 || i < 0 || j > 7 || j < 0
+                move << [i, j]
+            end 
         end
-        move.delete_if { |i| i.include?(nil) }
-        return false if check_after_move?(start_row, start_col, end_row, end_col, board)
         return true if move.include?([end_row, end_col])
         false
     end
@@ -135,7 +138,7 @@ module CheckMove
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == board[start_row][start_col].color
         end
-        return false if check_after_move?(start_row, start_col, end_row, end_col, board)
+        
         return false if start_row != end_row
         until start_col == end_col
             if start_col > end_col
@@ -155,7 +158,7 @@ module CheckMove
             return false if board[end_row][end_col].color == color
         end
         return false if start_col != end_col
-        return false if check_after_move?(start_row, start_col, end_row, end_col, board)
+        
         until start_row == end_row
             if start_row > end_row
                 start_row -= 1
@@ -174,7 +177,7 @@ module CheckMove
         if !board[end_row][end_col].nil?
             return false if board[end_row][end_col].color == board[start_row][start_col].color
         end
-        return false if check_after_move?(start_row, start_col, end_row, end_col, board)
+        
         until start_row == end_row
             if d_one > 0 && d_two > 0
                 start_row += 1

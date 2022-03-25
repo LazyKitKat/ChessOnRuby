@@ -38,27 +38,40 @@ class Chess
         @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
     end
 
+    def end_game
+        color = @current_player.color
+
+    end
+
     def play
         finished = false
         result = ""
-
-
         puts help()
         until finished 
             color = @current_player.color
+            chess_board = @board.chess_board
             which_castle = ""
+            pick = ""
+            destination = ""
+            
+           
             @board.print
             puts "#{@current_player.color}'s move." 
-            puts "Choose your piece: "
-            print "$ > " 
-            pick = gets.chomp
+            
 
-            until @board.valid_pick?(@current_player.color, pick)
+            loop do
+                puts "Choose your piece: "
+                print "$ > " 
+                pick = gets.chomp
+
                 break if pick.downcase == "r" 
+                
+                
                 if pick == "save"
                     print "Enter a file name: "
                     filename = gets.chomp
                     save(filename)
+                    next
                 end
                 if pick.downcase == "c" && @board.can_castle?(@current_player.color)
                     puts castle_help()
@@ -75,6 +88,7 @@ class Chess
                     end
                     if which_castle == "c"
                         which_castle = ""
+                    next
                     else
                         break
                     end
@@ -82,10 +96,9 @@ class Chess
                 if pick.downcase == "c" && !@board.can_castle?(@current_player.color)
                     puts "You can't castle."
                 end
-                puts "Invalid pick"
-                print "$ > " 
-                pick = gets.chomp
-                pick = pick.capitalize
+                if @board.valid_pick?(color, pick)
+                    break
+                end
             end
             if pick == "c"
                 @board.castle(color, which_castle)
@@ -97,23 +110,34 @@ class Chess
                 finished = true
                 next 
             end
-            piece = @board.pick_piece(pick)
-            puts "Pick your destination:"
-            print "$ >> "
-            destination = gets.chomp
-            until @board.valid_move?(piece, destination)
-                puts "Invalid input."
+            
+            valid = false
+            loop do
                 puts "Pick your destination:"
                 print "$ >> "
                 destination = gets.chomp
+                if @board.valid_move?(pick, destination)
+                    break
+                end
             end
-            @board.move_piece(piece, destination)
+            @board.move_piece(pick, destination)
+
+
+            @current_player.check = false if @current_player.check == true
+            
             switch_player()
+
+            p @board.check?(color)
+
+            if @board.check?(color)
+                @current_player.check = true
+                puts "Check!"
+            end
         end
-        if result == "win"
-            puts "#{@current_player.color.capitalize} won!"
-        elsif result == "draw"
-            puts "Draw. Good job fellas!"
-        end
+        switch_player()
+        puts "#{@current_player.color.capitalize} won!"
     end
+
+
+
 end
