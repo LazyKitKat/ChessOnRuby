@@ -5,6 +5,7 @@
 </p>
 
 This is my project for TOP's Ruby course final assignment. 
+> **NOTE:** This code base is very messy. I'm yet to implement check and checkmate (end_game) modules which will scan the whole board and find any enemy piece with a valid move to your king's position. End_game will check if the current player has any valid moves that will **not** result in check.
 
 # How to run
 
